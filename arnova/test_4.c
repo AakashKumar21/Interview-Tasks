@@ -68,32 +68,37 @@ int count_instance(char *str, char *substr)
     int size = strlen(str);
     int size_sub = strlen(substr);
     char dummy[4] = "xxxx";
-    char copy[size];
+    char copy[size+1];
+    copy[size] = 0;
     strncpy(copy, str, size);
 
+    // printf("str: %s\n",copy);
     char *pos = strstr(copy, substr);
     while (pos)
     {
-        strncpy(pos, pos+size_sub, size_sub);
-        pos[size_sub] = 0;
+        strncpy(pos, pos+size_sub, size-size_sub);
+        copy[size-size_sub] = 0;
+        // printf("found at: %d, ",pos-copy);
+        // printf("now %s\n",copy);
         counts++;
-        pos = strstr(copy, "ab");
+        pos = strstr(copy, substr);
     }
     return counts;
 }
 
 void remove_instance(char *str, char *substr)
 {
+    int size = strlen(str);
     int size_sub = strlen(substr);
     char dummy[4] = "xxxx";
 
     char *pos = strstr(str, substr);
     while (pos)
     {
-        strncpy(pos, pos+size_sub, size_sub);
-        pos[size_sub] = 0;
+        strncpy(pos, pos+size_sub, size-size_sub);
+        pos[size-size_sub] = 0;
         // printf("%s\n", str);
-        pos = strstr(str, "ab");
+        pos = strstr(str, substr);
     }
 }
 
@@ -102,8 +107,11 @@ int get_points(char *str, char *substr, int x){
     int count = count_instance(str, substr);
     points += count * x;
     remove_instance(str, substr);
-    printf("Removed: %s: %d  ", substr, count);
-    printf("Now: %s\n", substr);
+    if(count){
+        printf("Removed: %s: %d  ", substr, count);
+        printf("Now: %s  ", str);
+        printf("Points: %d\n", points);
+    }
     return points;
 }
 
@@ -117,6 +125,12 @@ int main()
     get_priority(points, weights, 4);
     print_arr(weights, 4);
     int t;
+    // printf("%d\n", count_instance(str, "ab"));
+    // printf("%d\n", count_instance(str, "ba"));
+    // printf("%d\n", count_instance(str, "aaa"));
+    // printf("%d\n", count_instance(str, "aba"));
+    // printf("%d\n", count_instance(str, "bab"));
+    // return;
     for (int i = 0; i < 4; i++)
     {
         // priority of AB and BA is same
