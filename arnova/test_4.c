@@ -99,8 +99,11 @@ void remove_instance(char *str, char *substr)
 
 int get_points(char *str, char *substr, int x){
     int points = 0;
-    points += count_instance(str, substr) * x;
+    int count = count_instance(str, substr);
+    points += count * x;
     remove_instance(str, substr);
+    printf("Removed: %s: %d  ", substr, count);
+    printf("Now: %s\n", substr);
     return points;
 }
 
@@ -120,7 +123,6 @@ int main()
         // AB
         if ((i < 2) && (weights[0] == weights[1]))
         {
-            printf("AB=BA\n");
             if (count_instance(str, "ab") > count_instance(str, "ba"))
             {
                 total_points += get_points(str, "ab",x);
@@ -134,13 +136,11 @@ int main()
         }
         if (weights[i] == 0)
         {
-            printf("AB\n");
             total_points += get_points(str, "ab",x);
         }
         // BA
         if (weights[i] == 1)
         {
-            printf("BA\n");
             total_points += get_points(str, "ba",y);
         }
         // ABA or BAB
@@ -148,13 +148,11 @@ int main()
         {
             if (count_instance(str, "aba") > count_instance(str, "bab"))
             {
-                printf("ABA\n");
                 total_points += get_points(str, "aba",x+y);
                 total_points += get_points(str, "bab",x+y);
             }
             else
             {
-                printf("BAB\n");
                 total_points += get_points(str, "bab",x+y);
                 total_points += get_points(str, "aba",x+y);
             }
@@ -165,13 +163,11 @@ int main()
         {
             if (count_instance(str, "aaa") > count_instance(str, "bbb"))
             {
-                printf("AAA\n");
                 total_points += get_points(str, "aaa",x*y);
                 total_points += get_points(str, "bbb",x*y);
             }
             else
             {
-                printf("BBB\n");
                 total_points += get_points(str, "bbb",x*y);
                 total_points += get_points(str, "aaa",x*y);
             }
